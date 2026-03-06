@@ -163,28 +163,26 @@ export async function POST(request: NextRequest) {
     }
 
     // Only reaches here for score 0-25
-    if (shouldAutoApprove(riskScore)) {
-      await updateReviewStatus(
-        review.id,
-        'APPROVED',
-        'Auto-approved: passed all validation checks'
-      );
+    await updateReviewStatus(
+      review.id,
+      'APPROVED',
+      'Auto-approved: passed all validation checks'
+    );
 
-      await updateReviewStatus(
-        review.id,
-        'PUBLISHED',
-        'Auto-published: low-risk review'
-      );
+    await updateReviewStatus(
+      review.id,
+      'PUBLISHED',
+      'Auto-published: low-risk review'
+    );
 
-      return NextResponse.json(
-        {
-          id: review.id,
-          status: 'PUBLISHED',
-          message: 'Review submitted and published successfully',
-        },
-        { status: 201 }
-      );
-    }
+    return NextResponse.json(
+      {
+        id: review.id,
+        status: 'PUBLISHED',
+        message: 'Review submitted and published successfully',
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error submitting review:', error);
     return NextResponse.json(
